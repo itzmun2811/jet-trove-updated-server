@@ -1,7 +1,7 @@
 const express =require('express');
 require('dotenv').config();
 const cors =require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app =express();
 const port =process.env.PORT || 3000;
 
@@ -32,6 +32,18 @@ async function run() {
     res.send(result)
   })
 
+  app.get('/addPackage',async(req,res)=>{
+    const result=await tourPackageCollections.find().toArray();
+    res.send(result)
+  })
+app.get('packageDetails/:id',async(req,res)=>{
+    const id=req.params.id;
+    const query ={
+    _id: new ObjectId(id)
+    }
+    const result=await tourPackageCollections.findOne();
+    res.send(result)
+})
 
 
 
