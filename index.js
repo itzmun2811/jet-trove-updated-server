@@ -25,8 +25,17 @@ async function run() {
     await client.connect();
  
     const tourPackageCollections = client.db('tourPackagesCollection').collection('tourPackage')
+    const featuredDataCollections=client.db('featuredDataCollection').collection('featuredData')
+    const bookingCollections=client.db('bookingCollection').collection('booking')
+ // featured data related api
+  app.get('/featuredData',async(req,res)=>{
+     const result = await featuredDataCollections.find().toArray();
+     res.send(result)
 
-  app.post('/addPackage',async(req,res)=>{
+  })
+ 
+//  package related api
+    app.post('/addPackage',async(req,res)=>{
     const package =req.body;
     const result =await tourPackageCollections.insertOne(package);
     res.send(result)
@@ -36,16 +45,21 @@ async function run() {
     const result=await tourPackageCollections.find().toArray();
     res.send(result)
   })
-app.get('packageDetails/:id',async(req,res)=>{
+app.get('/addPackage/:id',async(req,res)=>{
     const id=req.params.id;
     const query ={
     _id: new ObjectId(id)
     }
-    const result=await tourPackageCollections.findOne();
+    const result=await tourPackageCollections.findOne(query);
     res.send(result)
 })
 
-
+// booking related api
+ app.post('/booking',async(req,res)=>{
+    const booking=req.body;
+    const result=await bookingCollections.insertOne(booking);
+    res.send(result)
+ })
 
 
 
