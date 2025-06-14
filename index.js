@@ -53,6 +53,18 @@ app.get('/addPackage/:id',async(req,res)=>{
     const result=await tourPackageCollections.findOne(query);
     res.send(result)
 })
+app.patch('/addPackage/:id',async(req,res)=>{
+    const id =req.params.id;
+    const query={
+    _id:  new ObjectId(id)
+    }
+    const updatedDoc={
+        $inc:{
+            bookingCount : 1
+        }
+    }
+    const result=await tourPackageCollections.updateOne(query,updatedDoc)
+})
 
 // booking related api
  app.post('/booking',async(req,res)=>{
