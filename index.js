@@ -41,9 +41,24 @@ async function run() {
     res.send(result)
   })
 
+//   app.get('/addPackage',async(req,res)=>{
+//     const result=await tourPackageCollections.find().toArray();
+//     res.send(result)
+//   })
+
   app.get('/addPackage',async(req,res)=>{
-    const result=await tourPackageCollections.find().toArray();
-    res.send(result)
+     const search =req.query.search  ;
+     console.log(search)
+     const query={
+        $or:[
+           { 'tour-name': { $regex: search, $options: 'i' } },
+            {destination:{$regex: search,
+                $options:'i'
+            }}
+        ]
+     }
+     const result=await tourPackageCollections.find(query).toArray()
+     res.send(result)
   })
 app.get('/addPackage/:id',async(req,res)=>{
     const id=req.params.id;
