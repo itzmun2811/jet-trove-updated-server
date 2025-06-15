@@ -41,14 +41,15 @@ async function run() {
     res.send(result)
   })
 
-//   app.get('/addPackage',async(req,res)=>{
-//     const result=await tourPackageCollections.find().toArray();
-//     res.send(result)
-//   })
-
   app.get('/addPackage',async(req,res)=>{
+    const result=await tourPackageCollections.find().toArray();
+    res.send(result)
+   })
+    
+
+  app.get('/addPackageBySearch',async(req,res)=>{
      const search =req.query.search  ;
-     console.log(search)
+     console.log(search);
      const query={
         $or:[
            { 'tour-name': { $regex: search, $options: 'i' } },
@@ -59,6 +60,15 @@ async function run() {
      }
      const result=await tourPackageCollections.find(query).toArray()
      res.send(result)
+  })
+  app.get('/addPackageByEmail',async(req,res)=>{
+    const email=req.query.email;
+    const query ={};
+    if(email){
+        query['guide-email']= email
+    }
+    const result =await tourPackageCollections.find(query).toArray()
+    res.send(result)
   })
 app.get('/addPackage/:id',async(req,res)=>{
     const id=req.params.id;
@@ -79,6 +89,14 @@ app.patch('/addPackage/:id',async(req,res)=>{
         }
     }
     const result=await tourPackageCollections.updateOne(query,updatedDoc)
+})
+app.delete('/addPackage/:id',async(req,res)=>{
+    const id =req.params.id;
+    const query ={
+        _id : new ObjectId(id)
+    }
+    const result= await tourPackageCollections.deleteOne(query)
+    res.send(result)
 })
 
 // booking related api
