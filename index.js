@@ -99,6 +99,19 @@ app.delete('/addPackage/:id',async(req,res)=>{
     res.send(result)
 })
 
+app.put('/addPackage/:id',async(req,res)=>{
+    const id = req.params.id;
+    const query ={
+    _id: new ObjectId(id)
+    }
+    const updatedData=req.body;
+    const updatedDoc={
+        $set:updatedData
+    }
+    const result = await tourPackageCollections.updateOne(query,updatedDoc);
+    res.send(result)
+})
+
 // booking related api
  app.post('/booking',async(req,res)=>{
     const booking=req.body;
