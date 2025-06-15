@@ -118,6 +118,33 @@ app.put('/addPackage/:id',async(req,res)=>{
     const result=await bookingCollections.insertOne(booking);
     res.send(result)
  })
+ app.get('/booking',async(req,res)=>{
+    const result =await bookingCollections.find().toArray();
+    res.send(result)
+ })
+ app.get('/bookingByEmail',async(req,res)=>{
+     const email =req.query.email;
+     const query={};
+    if(email){
+        query['buyer-email']= email;
+    }
+    const result =await bookingCollections.find(query).toArray()
+    res.send(result)
+ })
+ app.patch('/booking/:id',async(req,res)=>{
+    const id=req.params.id;
+    const query={
+        _id: new ObjectId(id)
+    }
+
+    const updatedStatus ={
+     $set:{
+        status:'completed'
+     }
+    }
+    const result =await bookingCollections.updateOne(query,updatedStatus)
+    res.send(result)
+ })
 
 
 
