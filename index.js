@@ -5,7 +5,8 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app =express();
 const port =process.env.PORT || 3000;
 
-
+app.use(express.json())
+app.use(cors())
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.nywi6wf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -70,8 +71,9 @@ async function run() {
  
 //  package related api
     app.post('/addPackage',async(req,res)=>{
-    const package =req.body;
-    const result =await tourPackageCollections.insertOne(package);
+       
+  const package = req.body;
+ const result =await tourPackageCollections.insertOne(package);
     res.send(result)
   })
 
@@ -80,8 +82,7 @@ async function run() {
     res.send(result)
    })
     
-
-  app.get('/addPackageBySearch',async(req,res)=>{
+ app.get('/addPackageBySearch',async(req,res)=>{
      const search =req.query.search  ;
      console.log(search);
      const query={
@@ -110,6 +111,11 @@ async function run() {
     res.send(result)
   })
 app.get('/addPackage/:id',async(req,res)=>{
+
+//     const email=req.query.email;
+//     if(email !== req.decoded.email){
+//     return res.status(403).send({message:'forbidden access'})
+//    }
     const id=req.params.id;
     const query ={
     _id: new ObjectId(id)
@@ -138,8 +144,13 @@ app.delete('/addPackage/:id',async(req,res)=>{
     res.send(result)
 })
 
-app.put('/addPackage/:id',async(req,res)=>{
-    const id = req.params.id;
+app.put('/addPackage/:id',verifyFireBaseToken,async(req,res)=>{
+   const id = req.params.id;
+   const email=req.query.email;
+   if(email !== req.decoded.email){
+    return res.status(403).send({message:'forbidden access'})
+   }
+
     const query ={
     _id: new ObjectId(id)
     }
@@ -152,17 +163,20 @@ app.put('/addPackage/:id',async(req,res)=>{
 })
 
 // booking related api
- app.post('/booking',async(req,res)=>{
+ app.post('/booking',verifyFireBaseToken,async(req,res)=>{
+     const email =req.query.email;
+     if(email !== req.decoded.email){
+    return res.status(403).send({message:'forbidden access'})
+   }
     const booking=req.body;
     const result=await bookingCollections.insertOne(booking);
     res.send(result)
  })
- app.get('/booking',async(req,res)=>{
-    const result =await bookingCollections.find().toArray();
-    res.send(result)
- })
- app.get('/bookingByEmail',async(req,res)=>{
+ app.get('/booking',verifyFireBaseToken,async(req,res)=>{
      const email =req.query.email;
+     if(email !== req.decoded.email){
+    return res.status(403).send({message:'forbidden access'})
+   }
      const query={};
     if(email){
         query['buyer-email']= email;
@@ -170,7 +184,11 @@ app.put('/addPackage/:id',async(req,res)=>{
     const result =await bookingCollections.find(query).toArray()
     res.send(result)
  })
- app.patch('/booking/:id',async(req,res)=>{
+ app.patch('/booking/:id',verifyFireBaseToken,async(req,res)=>{
+const email =req.query.email;
+     if(email !== req.decoded.email){
+    return res.status(403).send({message:'forbidden access'})
+   }
     const id=req.params.id;
     const query={
         _id: new ObjectId(id)
