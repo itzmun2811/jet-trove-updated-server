@@ -42,7 +42,7 @@ express — Fast, minimal web framework for Node.js
 
 -dotenv — Load environment variables from .env file
 
-Middleware & Utilities
+## Middleware & Utilities
 -cors — Cross-Origin Resource Sharing middleware
 
 -body-parser — Parse incoming request bodies (JSON support)
