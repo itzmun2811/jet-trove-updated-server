@@ -125,8 +125,15 @@ app.get('/addPackage/:id',async(req,res)=>{
     const result=await tourPackageCollections.findOne(query);
     res.send(result)
 })
-app.patch('/addPackage/:id',async(req,res)=>{
+
+ 
+
+app.patch('/addPackage/:id',verifyFireBaseToken,async(req,res)=>{
     const id =req.params.id;
+     const email=req.query.email;
+   if(email !== req.decoded.email){
+    return res.status(403).send({message:'forbidden access'})
+   }
     const query={
     _id:  new ObjectId(id)
     }
@@ -139,6 +146,7 @@ app.patch('/addPackage/:id',async(req,res)=>{
 })
 app.delete('/addPackage/:id',async(req,res)=>{
     const id =req.params.id;
+   
     const query ={
         _id : new ObjectId(id)
     }

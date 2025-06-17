@@ -18,7 +18,7 @@ The backend server for Jet_Trove, a tour package booking platform that handles u
 
 -Filtering and search by email or package details
 
-## Live URL -
+## Live URL -https://tour-management-server-kappa.vercel.app/
 
 
 ## Tech Stack
