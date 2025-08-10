@@ -72,7 +72,7 @@ async function run() {
   })
  
 //  package related api
-    app.post('/addPackage',async(req,res)=>{
+    app.post('/addPackage',verifyFireBaseToken,async(req,res)=>{
        
   const package = req.body;
  const result =await tourPackageCollections.insertOne(package);
@@ -114,10 +114,7 @@ async function run() {
   })
 app.get('/addPackage/:id',async(req,res)=>{
 
-//     const email=req.query.email;
-//     if(email !== req.decoded.email){
-//     return res.status(403).send({message:'forbidden access'})
-//    }
+
     const id=req.params.id;
     const query ={
     _id: new ObjectId(id)
@@ -144,7 +141,7 @@ app.patch('/addPackage/:id',verifyFireBaseToken,async(req,res)=>{
     }
     const result=await tourPackageCollections.updateOne(query,updatedDoc)
 })
-app.delete('/addPackage/:id',async(req,res)=>{
+app.delete('/addPackage/:id',verifyFireBaseToken,async(req,res)=>{
     const id =req.params.id;
    
     const query ={
