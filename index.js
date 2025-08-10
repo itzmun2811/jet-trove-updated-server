@@ -127,10 +127,6 @@ app.get('/addPackage/:id',async(req,res)=>{
 
 app.patch('/addPackage/:id',verifyFireBaseToken,async(req,res)=>{
     const id =req.params.id;
-     const email=req.query.email;
-   if(email !== req.decoded.email){
-    return res.status(403).send({message:'forbidden access'})
-   }
     const query={
     _id:  new ObjectId(id)
     }
@@ -140,6 +136,7 @@ app.patch('/addPackage/:id',verifyFireBaseToken,async(req,res)=>{
         }
     }
     const result=await tourPackageCollections.updateOne(query,updatedDoc)
+    res.send(result)
 })
 app.delete('/addPackage/:id',verifyFireBaseToken,async(req,res)=>{
     const id =req.params.id;
@@ -173,8 +170,9 @@ app.put('/addPackage/:id',verifyFireBaseToken,async(req,res)=>{
  app.post('/booking',verifyFireBaseToken,async(req,res)=>{
      const email =req.query.email;
      if(email !== req.decoded.email){
-    return res.status(403).send({message:'forbidden access'})
+    return res.status(403).send({message:'forbidden access'},)
    }
+  
     const booking=req.body;
     const result=await bookingCollections.insertOne(booking);
     res.send(result)
